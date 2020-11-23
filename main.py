@@ -13,7 +13,7 @@ images = os.listdir(path_in)
 config = TestOptions().parse()
 
 model = InpaintingModel_GMCNN(in_channels=4, opt=config)
-model.load_networks('model-celeb-256-rect.pth')
+model.load_networks(config.load_model_dir)
 
 for img_file in images:
     image = cv2.imread(path_in + img_file)
