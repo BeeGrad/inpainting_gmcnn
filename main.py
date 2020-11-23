@@ -6,8 +6,8 @@ from util.utils import generate_rect_mask, generate_stroke_mask
 from options.options import TestOptions
 from model.network import GMCNNModel
 
-path_in = 'imgs/celebahq_256x256/'
-path_out = 'results/celebahq_256x256/'
+path_in = 'imgs/places2_256x256/'
+path_out = 'results/places2_256x256/'
 
 images = os.listdir(path_in)
 
@@ -34,24 +34,26 @@ with tf.Session(config=tf.ConfigProto()) as sess:
     for img_file in images:
         
         image = cv2.imread(path_in + img_file)
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         h, w, c = image.shape
-        mask = generate_stroke_mask(im_size=[h, w])
+        mask = generate_stroke_mask(im_size=[h, w], parts=8, maxVertex=12, maxLength=50, maxBrushWidth=10)
         # mask = generate_rect_mask(im_size=[h, w, c], mask_size=[128, 128])
 
         # Original Image
         input_img = image.astype(np.uint8)
 
         # Masked Image
+        image_vis = image * (1 - mask) + 255 * mask
+
         image = image * (1-mask) + 255 * mask
-        image = np.expand_dims(image, 0)
-        mask = np.expand_dims(mask, 0)
+        image = np.expand_dims(image, axis=0)
+        mask = np.expand_dims(mask, axis=0)
 
         # Output Image
         result = sess.run(output, feed_dict={input_image_tf: image, input_mask_tf: mask})
 
         cv2.imwrite(str(path_out + 'original_' + img_file), input_img)
-        cv2.imwrite(str(path_out + 'masked_' + img_file), image.astype(np.uint8))
+        cv2.imwrite(str(path_out + 'masked_' + img_file), image_vis)
         cv2.imwrite(str(path_out + 'output_' + img_file), result[0][:, :, ::-1])
         print(img_file, 'saved.')
 
