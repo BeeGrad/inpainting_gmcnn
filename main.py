@@ -33,7 +33,7 @@ for img_file in images:
     result = model.evaluate(image, mask)
     result = np.transpose(result[0][::-1,:,:], [1, 2, 0])
 
-    cv2.imwrite(str(path_out + 'input_' + img_file), input_img)
+    cv2.imwrite(str(path_out + 'original_' + img_file), input_img)
     cv2.imwrite(str(path_out + 'masked_' + img_file), image_vis.astype(np.uint8))
     cv2.imwrite(str(path_out + 'output_' + img_file), result)
 
