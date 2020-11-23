@@ -1,19 +1,20 @@
 import os
 import cv2
 import numpy as np
-from util.utils import generate_rect_mask, generate_stroke_mask
-from model.net import InpaintingModel_GMCNN
-from options.options import TestOptions
+from util.pytorch_utils import generate_rect_mask, generate_stroke_mask
+from model.pytorch.net import InpaintingModel_GMCNN
+from options.options import Options
 
 path_in = 'imgs/celebahq_256x256/'
 path_out = 'results/celebahq_256x256/'
+path_dataset = 'model-celeb-256-rect/model-celeb-256-rect.pth'
 
 images = os.listdir(path_in)
 
-config = TestOptions().parse()
+config = Options().parse()
 
 model = InpaintingModel_GMCNN(in_channels=4, opt=config)
-model.load_networks(config.load_model_dir)
+model.load_networks(path_dataset)
 
 for img_file in images:
     image = cv2.imread(path_in + img_file)

@@ -5,7 +5,7 @@ import time
 import shutil
 import os, re
 import tensorflow as tf
-from model.ops import np_free_form_mask
+from model.tensorflow.ops import np_free_form_mask
 
 def f2uint(x):
     if x.__class__ == tf.Tensor:
@@ -27,7 +27,7 @@ def generate_rect_mask(im_shapes, mask_shapes, rand=False):
     return mask
 
 
-def generate_stroke_mask(im_size, parts=16, maxVertex=24, maxLength=100, maxBrushWidth=24, maxAngle=360):
+def generate_stroke_mask(im_size, parts=10, maxVertex=15, maxLength=50, maxBrushWidth=10, maxAngle=360):
     h, w = im_size[:2]
     mask = np.zeros((h, w, 1), dtype=np.float32)
     for i in range(parts):

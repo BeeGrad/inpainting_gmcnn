@@ -2,16 +2,17 @@ import os
 import cv2
 import numpy as np
 import tensorflow as tf
-from util.utils import generate_rect_mask, generate_stroke_mask
-from options.options import TestOptions
-from model.network import GMCNNModel
+from util.tf_utils import generate_rect_mask, generate_stroke_mask
+from options.options import Options
+from model.tensorflow.network import GMCNNModel
 
 path_in = 'imgs/places2_256x256/'
 path_out = 'results/places2_256x256/'
+path_dataset = 'model-places2-256-stroke'
 
 images = os.listdir(path_in)
 
-config = TestOptions().parse()
+config = Options().parse()
 
 model = GMCNNModel()
 
@@ -26,7 +27,7 @@ with tf.Session(config=tf.ConfigProto()) as sess:
 
     # load pretrained model
     vars_list = tf.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
-    assign_ops = list(map(lambda x: tf.assign(x, tf.contrib.framework.load_variable(config.load_model_dir, x.name)), vars_list))
+    assign_ops = list(map(lambda x: tf.assign(x, tf.contrib.framework.load_variable(path_dataset, x.name)), vars_list))
     sess.run(assign_ops)
     print('model loaded.')
     total_time = 0
@@ -36,7 +37,7 @@ with tf.Session(config=tf.ConfigProto()) as sess:
         image = cv2.imread(path_in + img_file)
         # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
         h, w, c = image.shape
-        mask = generate_stroke_mask(im_size=[h, w], parts=8, maxVertex=12, maxLength=50, maxBrushWidth=10)
+        mask = generate_stroke_mask(im_size=[h, w])
         # mask = generate_rect_mask(im_size=[h, w, c], mask_size=[128, 128])
 
         # Original Image

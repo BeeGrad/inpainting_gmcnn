@@ -1,10 +1,10 @@
 import tensorflow as tf
-from model.ops import random_bbox, bbox2mask, local_patch
-from model.ops import priority_loss_mask
-from model.ops import id_mrf_reg
-from model.ops import gan_wgan_loss, gradients_penalty, random_interpolates
-from model.ops import free_form_mask_tf
-from util.utils import f2uint
+from model.tensorflow.ops import random_bbox, bbox2mask, local_patch
+from model.tensorflow.ops import priority_loss_mask
+from model.tensorflow.ops import id_mrf_reg
+from model.tensorflow.ops import gan_wgan_loss, gradients_penalty, random_interpolates
+from model.tensorflow.ops import free_form_mask_tf
+from util.tf_utils import f2uint
 from functools import partial
 
 class GMCNNModel:

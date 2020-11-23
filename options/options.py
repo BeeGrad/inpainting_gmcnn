@@ -2,14 +2,12 @@ import argparse
 import os
 import time
 
-class TestOptions:
+class Options:
     def __init__(self):
         self.parser = argparse.ArgumentParser()
         self.initialized = False
 
     def initialize(self):
-        self.parser.add_argument('--load_model_dir', type=str, default='model-celeb-256-rect/model-celeb-256-rect.pth', help='pretrained models are given here')
-        # self.parser.add_argument('--load_model_dir', type=str, default='model-places2-256-stroke', help='pretrained models are given here')
         self.parser.add_argument('--seed', type=int, default=1, help='random seed')
         self.parser.add_argument('--model', type=str, default='gmcnn')
         self.parser.add_argument('--random_mask', type=int, default=0, help='using random mask')
